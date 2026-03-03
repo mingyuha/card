@@ -286,9 +286,11 @@ function updateSummary(cardId) {
   el.querySelector(".sv-used").textContent = fmt(usedTotal);
   el.querySelector(".sv-sched").textContent = "+ "+fmt(scheduledTotal);
   const mk = el.querySelector(".mk"), mv = el.querySelector(".mv");
+  const over = (usedTotal + scheduledTotal) - card.target;
   if (isDone) {
     mk.textContent="🎉 실적 달성!"; mk.style.color=card.color;
-    mv.textContent="완료"; mv.style.color=card.color;
+    mv.textContent = over > 0 ? fmt(over) + " 초과" : "딱 맞음";
+    mv.style.color=card.color;
   } else {
     mk.textContent="추가 필요 금액"; mk.style.color="#fff";
     mv.textContent=fmt(remaining); mv.style.color="#fff";
