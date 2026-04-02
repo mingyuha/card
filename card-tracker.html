@@ -135,6 +135,28 @@ body {
 .mk { font-size: 13px; font-weight: 700; }
 .mv { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
 .card-note { font-size: 11px; color: var(--muted); margin-top: 11px; }
+
+/* 상단 요약 */
+.top-summary {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 18px; padding: 16px 18px; margin-bottom: 20px;
+}
+.top-summary-title {
+  font-size: 10px; letter-spacing: 3px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.top-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ts-item {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 11px 13px; transition: border-color 0.3s;
+}
+.ts-item.done { border-color: var(--ts-accent); }
+.ts-item .ts-name { font-size: 11px; font-weight: 700; margin-bottom: 5px; }
+.ts-item .ts-target { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.ts-item .ts-remaining { font-size: 15px; font-weight: 900; letter-spacing: -0.3px; }
+.ts-item.done .ts-remaining { font-size: 13px; }
+.ts-item .ts-bar { background: var(--bg); border-radius: 99px; height: 3px; margin-top: 8px; overflow: hidden; }
+.ts-item .ts-bar-fill { height: 100%; border-radius: 99px; width: 0%; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
 </style>
 </head>
 <body>
@@ -144,6 +166,11 @@ body {
   <h1>카드 실적 관리</h1>
   <div class="header-date" id="headerDate"></div>
   <div class="header-reset" onclick="resetAll()">🔄 이번 달 초기화</div>
+</div>
+
+<div class="top-summary">
+  <div class="top-summary-title">이번 달 실적 현황</div>
+  <div class="top-summary-grid" id="topSummaryGrid"></div>
 </div>
 
 <div id="cardList"></div>
@@ -295,6 +322,24 @@ function updateSummary(cardId) {
     mk.textContent="추가 필요 금액"; mk.style.color="#fff";
     mv.textContent=fmt(remaining); mv.style.color="#fff";
   }
+
+  // 상단 요약 갱신
+  const ts = document.getElementById("ts_"+cardId);
+  if (ts) {
+    ts.classList.toggle("done", isDone);
+    ts.style.setProperty("--ts-accent", card.accent);
+    ts.querySelector(".ts-name").style.color = card.color;
+    ts.querySelector(".ts-target").textContent = "목표 " + fmt(card.target);
+    const rem = ts.querySelector(".ts-remaining");
+    if (isDone) {
+      rem.textContent = "✓ 달성";
+      rem.style.color = card.color;
+    } else {
+      rem.textContent = fmt(remaining) + " 남음";
+      rem.style.color = "#fff";
+    }
+    ts.querySelector(".ts-bar-fill").style.width = progress + "%";
+  }
 }
 
 function renderCard(cardId) {
@@ -392,6 +437,25 @@ function buildCards() {
 
 document.getElementById("headerDate").textContent =
   new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long"}) + " 기준";
+
+// 상단 요약 그리드 생성
+(function() {
+  const grid = document.getElementById("topSummaryGrid");
+  DEFAULT_CARDS.forEach(card => {
+    const div = document.createElement("div");
+    div.className = "ts-item";
+    div.id = "ts_" + card.id;
+    div.innerHTML = `
+      <div class="ts-name" style="color:${card.color}">${card.name}</div>
+      <div class="ts-target">-</div>
+      <div class="ts-remaining">-</div>
+      <div class="ts-bar">
+        <div class="ts-bar-fill" style="background:linear-gradient(90deg,${card.accent},${card.color})"></div>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+})();
 
 buildCards();
 </script>
