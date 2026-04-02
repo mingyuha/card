@@ -445,6 +445,10 @@ document.getElementById("headerDate").textContent =
     const div = document.createElement("div");
     div.className = "ts-item";
     div.id = "ts_" + card.id;
+    div.style.cursor = "pointer";
+    div.onclick = () => {
+      document.getElementById("card_"+card.id).scrollIntoView({ behavior:"smooth", block:"start" });
+    };
     div.innerHTML = `
       <div class="ts-name" style="color:${card.color}">${card.name}</div>
       <div class="ts-target">-</div>
