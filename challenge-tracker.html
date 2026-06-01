@@ -325,7 +325,7 @@ function updateSummary() {
       nextText = `${badge}${next.name}까지 <span style="color:${act.color};font-weight:700">${remaining.toFixed(1)}km</span>`;
     }
     return `
-      <div class="summary-act-row">
+      <div class="summary-act-row" onclick="scrollToAct('${act.id}')" style="cursor:pointer">
         <div class="sum-icon">${act.icon}</div>
         <div class="sum-info">
           <div class="sum-name" style="color:${act.color}">${act.name}</div>
@@ -339,6 +339,15 @@ function updateSummary() {
         </div>
       </div>`;
   }).join("");
+}
+
+function scrollToAct(actId) {
+  const el = document.getElementById("act_"+actId);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  el.style.transition = "box-shadow 0.3s";
+  el.style.boxShadow = "0 0 0 2px #ffffff44";
+  setTimeout(() => { el.style.boxShadow = ""; }, 1000);
 }
 
 function resetAll() {
