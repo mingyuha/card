@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>5월 건강 챌린지</title>
+<title>건강 챌린지</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -131,9 +131,9 @@ body {
 
 <div class="header">
   <div class="header-label">Health Challenge</div>
-  <h1>5월 건강 챌린지</h1>
+  <h1 id="mainTitle"></h1>
   <div class="header-sub" id="headerDate"></div>
-  <div class="header-reset" onclick="resetAll()">🔄 기록 초기화</div>
+  <div class="header-reset" onclick="resetAll()">?? 기록 초기화</div>
 </div>
 
 <div class="summary-card">
@@ -146,7 +146,7 @@ body {
 const ACTIVITIES = [
   {
     id: "walk",
-    icon: "🚶",
+    icon: "??",
     name: "걷기",
     color: "#7DD8F8",
     accent: "#0099CC",
@@ -159,7 +159,7 @@ const ACTIVITIES = [
   },
   {
     id: "run",
-    icon: "🏃",
+    icon: "??",
     name: "러닝",
     color: "#82E0C4",
     accent: "#1FAF84",
@@ -260,17 +260,17 @@ function updateStatus(actId) {
 
   if (achieved === act.levels.length - 1) {
     // 고급 달성
-    sLabel.textContent = "🏆 고급 달성 완료!";
+    sLabel.textContent = "?? 고급 달성 완료!";
     sVal.textContent = `+${(total - act.levels[act.levels.length-1].km).toFixed(1)}km 초과`;
     sVal.style.color = act.color;
-    sBadge.textContent = "고급 ✓";
+    sBadge.textContent = "고급 ?";
     sBadge.style.background = act.accent;
   } else if (next) {
     sLabel.textContent = `${next.name} 달성까지 남은 거리`;
     sVal.textContent = remaining.toFixed(1) + "km";
     sVal.style.color = achieved >= 0 ? act.color : "#fff";
     if (achieved >= 0) {
-      sBadge.textContent = act.levels[achieved].name + " ✓";
+      sBadge.textContent = act.levels[achieved].name + " ?";
       sBadge.style.background = act.accent;
     } else {
       sBadge.textContent = "미달성";
@@ -318,10 +318,10 @@ function updateSummary() {
     let kmText, nextText;
     if (achieved === act.levels.length - 1) {
       kmText = `<span style="color:${act.color}">${total.toFixed(1)}km</span>`;
-      nextText = `🏆 고급 달성!`;
+      nextText = `?? 고급 달성!`;
     } else {
       kmText = `<span style="color:#fff">${total.toFixed(1)}km</span>`;
-      const badge = achieved >= 0 ? `<span style="color:${act.color};font-weight:700">${act.levels[achieved].name} ✓</span> · ` : "";
+      const badge = achieved >= 0 ? `<span style="color:${act.color};font-weight:700">${act.levels[achieved].name} ?</span> · ` : "";
       nextText = `${badge}${next.name}까지 <span style="color:${act.color};font-weight:700">${remaining.toFixed(1)}km</span>`;
     }
     return `
@@ -397,8 +397,11 @@ function buildUI() {
   });
 }
 
+const now = new Date();
+const month = now.getMonth() + 1;
+document.getElementById("mainTitle").textContent = `${month}월 건강 챌린지`;
 document.getElementById("headerDate").textContent =
-  new Date().toLocaleDateString("ko-KR",{year:"numeric",month:"long"});
+  now.toLocaleDateString("ko-KR",{year:"numeric",month:"long"});
 
 buildUI();
 updateSummary();
