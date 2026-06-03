@@ -4,416 +4,263 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <title>건강 챌린지</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0C0E14;
-  --surface: #161820;
-  --surface2: #1E2030;
-  --border: #252840;
-  --text: #E8E8F0;
-  --muted: #6B6D80;
-}
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background: var(--bg); color: var(--text);
-  min-height: 100vh; padding: 20px 16px 80px;
-  -webkit-font-smoothing: antialiased;
-}
-
-.header { text-align: center; margin-bottom: 28px; }
-.header-label { font-size: 10px; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
-.header h1 { font-size: 20px; font-weight: 900; color: #fff; }
-.header-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.header-reset {
-  margin-top: 12px; display: inline-block; font-size: 11px;
-  color: var(--muted); background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 20px; padding: 5px 14px; cursor: pointer;
-}
-
-/* activity card */
-.act-card {
-  background: var(--surface); border-radius: 18px; padding: 20px;
-  border: 1px solid var(--border); margin-bottom: 20px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-.act-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.act-icon { font-size: 26px; line-height: 1; display:flex; align-items:center; }
-.act-title { font-size: 16px; font-weight: 900; }
-.act-total { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-/* 3-step level bar */
-.levels { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
-.level-row { display: flex; flex-direction: column; gap: 5px; }
-.level-meta { display: flex; justify-content: space-between; align-items: center; }
-.level-name { font-size: 11px; font-weight: 700; }
-.level-km { font-size: 11px; color: var(--muted); }
-.level-track { background: var(--surface2); border-radius: 99px; height: 6px; overflow: hidden; }
-.level-fill { height: 100%; border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
-
-/* status box */
-.status-box {
-  border-radius: 12px; padding: 14px 16px; margin-bottom: 18px;
-  background: var(--bg); border: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.status-left .s-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-.status-left .s-val { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
-.status-right { text-align: right; }
-.status-right .s-badge {
-  font-size: 11px; font-weight: 700; border-radius: 20px;
-  padding: 4px 12px; color: #fff;
-}
-
-/* record list */
-.sec-label { font-size: 10px; color: var(--muted); margin-bottom: 7px; letter-spacing: 0.3px; }
-.rec-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-.rec-item {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 8px 10px;
-  min-width: 0; overflow: hidden;
-}
-.rec-date {
-  width: 52px; min-width: 0; flex-shrink: 0;
-  background: transparent; border: none; outline: none;
-  font-size: 12px; color: var(--muted); font-family: inherit;
-}
-.rec-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
-.rec-dist {
-  flex: 1; min-width: 0; background: transparent; border: none; outline: none;
-  font-size: 15px; font-weight: 700; font-family: inherit;
-  text-align: right; padding-left: 6px; width: 0;
-}
-.rec-dist::placeholder { color: var(--muted); font-weight: 400; font-size: 12px; }
-.rec-unit { font-size: 11px; color: var(--muted); flex-shrink: 0; }
-.rec-del {
-  width: 22px; height: 22px; min-width: 22px; border-radius: 50%; background: #ff4d4d22;
-  border: none; color: #ff6b6b; font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.add-btn {
-  width: 100%; padding: 9px; border-radius: 10px;
-  border: 1px dashed var(--border); background: transparent;
-  color: var(--muted); font-size: 13px; font-family: inherit;
-  cursor: pointer;
-}
-.add-btn:active { background: var(--surface2); }
-
-.min-note { font-size: 11px; color: var(--muted); margin-top: 10px; padding-left: 2px; }
-
-/* 요약 카드 */
-.summary-card {
-  background: var(--surface); border-radius: 18px; padding: 20px;
-  border: 1px solid var(--border); margin-bottom: 24px;
-}
-.summary-card-title {
-  font-size: 10px; letter-spacing: 3px; color: var(--muted);
-  text-transform: uppercase; margin-bottom: 16px; text-align: center;
-}
-.summary-rows { display: flex; flex-direction: column; gap: 12px; }
-.summary-act-row {
-  display: flex; align-items: center; gap: 12px;
-  background: var(--bg); border-radius: 12px; padding: 12px 14px;
-}
-.sum-icon { font-size: 20px; flex-shrink: 0; display:flex; align-items:center; }
-.sum-info { flex: 1; min-width: 0; }
-.sum-name { font-size: 12px; font-weight: 700; margin-bottom: 5px; }
-.sum-bar-track { background: var(--surface2); border-radius: 99px; height: 4px; overflow: hidden; }
-.sum-bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
-.sum-right { text-align: right; flex-shrink: 0; }
-.sum-km { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
-.sum-next { font-size: 10px; color: var(--muted); margin-top: 2px; }
+:root { --bg:#0C0E14; --surface:#161820; --surface2:#1E2030; --border:#252840; --text:#E8E8F0; --muted:#6B6D80; }
+body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:20px 16px 80px; -webkit-font-smoothing:antialiased; }
+.header { text-align:center; margin-bottom:24px; }
+.header-label { font-size:10px; letter-spacing:4px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+.header h1 { font-size:20px; font-weight:900; color:#fff; }
+.header-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+.header-reset { margin-top:12px; display:inline-flex; align-items:center; gap:4px; font-size:11px; color:var(--muted); background:var(--surface2); border:1px solid var(--border); border-radius:20px; padding:5px 14px; cursor:pointer; }
+.summary-card { background:var(--surface); border-radius:18px; padding:18px 16px; border:1px solid var(--border); margin-bottom:20px; }
+.summary-card-title { font-size:10px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; margin-bottom:14px; text-align:center; }
+.sum-rows { display:flex; flex-direction:column; gap:10px; }
+.sum-row { display:flex; align-items:center; gap:10px; background:var(--bg); border-radius:12px; padding:11px 13px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.sum-icon { display:flex; align-items:center; flex-shrink:0; }
+.sum-info { flex:1; min-width:0; }
+.sum-name { font-size:12px; font-weight:700; margin-bottom:5px; }
+.sum-bar-track { background:var(--surface2); border-radius:99px; height:4px; overflow:hidden; }
+.sum-bar-fill { height:100%; border-radius:99px; transition:width 0.5s cubic-bezier(.4,0,.2,1); }
+.sum-right { text-align:right; flex-shrink:0; min-width:80px; }
+.sum-km { font-size:17px; font-weight:900; letter-spacing:-0.5px; }
+.sum-next { font-size:10px; color:var(--muted); margin-top:2px; }
+.act-card { background:var(--surface); border-radius:18px; padding:20px; border:1px solid var(--border); margin-bottom:16px; transition:border-color 0.3s,box-shadow 0.3s; }
+.act-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.act-icon { display:flex; align-items:center; flex-shrink:0; }
+.act-title { font-size:15px; font-weight:900; }
+.act-total { font-size:12px; color:var(--muted); margin-top:2px; }
+.levels { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+.level-row { display:flex; flex-direction:column; gap:5px; }
+.level-meta { display:flex; justify-content:space-between; }
+.level-name { font-size:11px; font-weight:700; }
+.level-km { font-size:11px; color:var(--muted); }
+.level-track { background:var(--surface2); border-radius:99px; height:6px; overflow:hidden; }
+.level-fill { height:100%; border-radius:99px; transition:width 0.5s cubic-bezier(.4,0,.2,1); }
+.status-box { border-radius:12px; padding:13px 15px; margin-bottom:16px; background:var(--bg); border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.s-label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+.s-val { font-size:22px; font-weight:900; letter-spacing:-0.5px; }
+.s-badge { font-size:11px; font-weight:700; border-radius:20px; padding:4px 12px; }
+.sec-label { font-size:10px; color:var(--muted); margin-bottom:7px; letter-spacing:0.3px; }
+.rec-list { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.rec-item { display:flex; align-items:center; gap:6px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:8px 10px; overflow:hidden; }
+.rec-date { width:52px; flex-shrink:0; background:transparent; border:none; outline:none; font-size:12px; font-family:inherit; }
+.rec-sep { width:1px; height:20px; background:var(--border); flex-shrink:0; }
+.rec-dist { flex:1; min-width:0; width:0; background:transparent; border:none; outline:none; font-size:15px; font-weight:700; font-family:inherit; text-align:right; padding-left:6px; }
+.rec-dist::placeholder { color:var(--muted); font-weight:400; font-size:12px; }
+.rec-unit { font-size:11px; color:var(--muted); flex-shrink:0; }
+.rec-del { width:22px; height:22px; min-width:22px; border-radius:50%; background:#ff4d4d22; border:none; color:#ff6b6b; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.add-btn { width:100%; padding:9px; border-radius:10px; border:1px dashed var(--border); background:transparent; color:var(--muted); font-size:13px; font-family:inherit; cursor:pointer; }
+.add-btn:active { background:var(--surface2); }
+.min-note { font-size:11px; color:var(--muted); margin-top:10px; }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="header-label">Health Challenge</div>
   <h1 id="mainTitle"></h1>
   <div class="header-sub" id="headerDate"></div>
-  <div class="header-reset" onclick="resetAll()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>기록 초기화</div>
+  <div class="header-reset" onclick="resetAll()">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+    기록 초기화
+  </div>
 </div>
-
 <div class="summary-card">
   <div class="summary-card-title">Overview</div>
-  <div class="summary-rows" id="summaryRows"></div>
+  <div class="sum-rows" id="summaryRows"></div>
 </div>
 <div id="actList"></div>
-
 <script>
+const RUN_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="14" cy="4" r="2" fill="#82E0C4"/><path d="M12 7l-3 1.5L7 12h2l1.5-2 1.5 2.5-2 4h2.5l1.5-3.5L16 15l1 4h2l-1.5-5-3-3 1-3 2 2h2V8h-2.5L16 6.5 12 7z" fill="#82E0C4"/><path d="M7 17l-2 4h2l2-4" fill="#82E0C4"/></svg>';
+const WALK_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="4" r="2" fill="#7DD8F8"/><path d="M10 7.5L7 14h2.5l1-3 1.5 2-1 4.5H14l1-4 1.5 2H19v-2h-1.5L16 11l-1.5-2.5L13 7.5H10z" fill="#7DD8F8"/><path d="M9.5 17L8 21h2l1-3" fill="#7DD8F8"/><path d="M13.5 17l.5 4h2l-1-4" fill="#7DD8F8"/></svg>';
+const HIKE_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2 20 L8 8 L12 14 L16 6 L22 20 Z" fill="#C8A87A" opacity="0.3"/><path d="M2 20 L8 8 L12 14 L16 6 L22 20" stroke="#C8A87A" stroke-width="2" stroke-linejoin="round" fill="none"/><circle cx="9" cy="5" r="1.5" fill="#C8A87A"/><line x1="9" y1="6.5" x2="7" y2="12" stroke="#C8A87A" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="9" x2="11" y2="10" stroke="#C8A87A" stroke-width="1.5" stroke-linecap="round"/></svg>';
+
 const ACTIVITIES = [
-  {
-    id: "walk",
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="4" r="2" fill="#7DD8F8"/><path d="M10 7.5L7 14h2.5l1-3 1.5 2-1 4.5H14l1-4 1.5 2H19v-2h-1.5L16 11l-1.5-2.5L13 7.5H10z" fill="#7DD8F8"/><path d="M9.5 17L8 21h2l1-3" fill="#7DD8F8"/><path d="M13.5 17l.5 4h2l-1-4" fill="#7DD8F8"/></svg>`,
-    name: "걷기",
-    color: "#7DD8F8",
-    accent: "#0099CC",
-    levels: [
-      { name:"초급", km:40 },
-      { name:"중급", km:50 },
-      { name:"고급", km:60 },
-    ],
-    minNote: "1회 최소 2km 이상만 인정"
-  },
-  {
-    id: "run",
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="4" r="2" fill="#82E0C4"/><path d="M12 7l-3 1.5L7 12h2l1.5-2 1.5 2.5-2 4h2.5l1.5-3.5L16 15l1 4h2l-1.5-5-3-3 1-3 2 2h2V8h-2.5L16 6.5 12 7z" fill="#82E0C4"/><path d="M7 17l-2 4h2l2-4" fill="#82E0C4"/></svg>`,
-    name: "러닝",
-    color: "#82E0C4",
-    accent: "#1FAF84",
-    levels: [
-      { name:"초급", km:20 },
-      { name:"중급", km:25 },
-      { name:"고급", km:30 },
-    ],
-    minNote: "1회 최소 5km / 6km/h 이상만 인정"
-  }
+  { id:"run", icon:RUN_SVG, name:"러닝", color:"#82E0C4", accent:"#1FAF84", unit:"km",
+    levels:[{name:"초급",km:20},{name:"중급",km:25},{name:"고급",km:30}],
+    minNote:"1회 최소 5km / 6km/h 이상만 인정" },
+  { id:"walk", icon:WALK_SVG, name:"걷기", color:"#7DD8F8", accent:"#0099CC", unit:"km",
+    levels:[{name:"초급",km:40},{name:"중급",km:50},{name:"고급",km:60}],
+    minNote:"1회 최소 2km 이상만 인정" },
+  { id:"hike", icon:HIKE_SVG, name:"하이킹", color:"#C8A87A", accent:"#A0722A", unit:"m",
+    levels:[{name:"초급",km:400},{name:"중급",km:600},{name:"고급",km:800}],
+    minNote:"1회 최소 100m 고도 이상만 인정" }
 ];
 
-function loadState() {
-  try { return JSON.parse(localStorage.getItem("challenge_v1")) || {}; } catch { return {}; }
-}
+function loadState() { try { return JSON.parse(localStorage.getItem("challenge_v1")) || {}; } catch { return {}; } }
 function saveState() { localStorage.setItem("challenge_v1", JSON.stringify(state)); }
 let state = loadState();
 
 function getCS(id) {
-  if (!state[id]) state[id] = { records: [] };
+  if (!state[id]) state[id] = { records:[] };
   if (!state[id].records) state[id].records = [];
   return state[id];
 }
-
 function uid() { return "r" + Date.now() + Math.random().toString(36).slice(2,5); }
-
-function todayStr() {
-  const d = new Date();
-  return `${d.getMonth()+1}/${d.getDate()}`;
-}
+function todayStr() { const d = new Date(); return (d.getMonth()+1) + "/" + d.getDate(); }
+function fmtVal(act, val) { return act.unit === "m" ? val.toFixed(0) + "m" : val.toFixed(1) + "km"; }
 
 function addRecord(actId) {
   const cs = getCS(actId);
   const rid = uid();
-  cs.records.push({ id: rid, date: todayStr(), km: 0 });
+  cs.records.push({ id:rid, date:todayStr(), km:0 });
   saveState(); renderAct(actId);
-  setTimeout(() => {
-    const el = document.getElementById("km_"+rid);
-    if (el) el.focus();
-  }, 30);
+  setTimeout(function(){ var el = document.getElementById("km_"+rid); if(el) el.focus(); }, 30);
 }
-
 function updateRecord(actId, rid, field, val) {
-  const r = getCS(actId).records.find(r => r.id === rid);
+  var r = getCS(actId).records.find(function(r){ return r.id === rid; });
   if (!r) return;
-  if (field === "km") r.km = parseFloat(val) || 0;
-  else r.date = val;
-  saveState(); updateStatus(actId);
-  updateSummary();
+  if (field === "km") r.km = parseFloat(val) || 0; else r.date = val;
+  saveState(); updateStatus(actId); updateSummary();
 }
-
 function deleteRecord(actId, rid) {
-  const cs = getCS(actId);
-  cs.records = cs.records.filter(r => r.id !== rid);
-  saveState(); renderAct(actId);
+  var cs = getCS(actId);
+  cs.records = cs.records.filter(function(r){ return r.id !== rid; });
+  saveState(); renderAct(actId); updateSummary();
 }
 
 function calcStatus(act) {
-  const total = getCS(act.id).records.reduce((s,r) => s + (r.km||0), 0);
-  const levels = act.levels;
-
-  // 달성한 레벨 찾기
-  let achieved = -1;
-  for (let i = levels.length-1; i >= 0; i--) {
-    if (total >= levels[i].km) { achieved = i; break; }
-  }
-
-  // 다음 목표
-  const nextIdx = achieved + 1;
-  const next = nextIdx < levels.length ? levels[nextIdx] : null;
-  const remaining = next ? Math.max(0, next.km - total) : 0;
-
-  // 각 레벨 progress (0~100)
-  const progresses = levels.map(lv => Math.min(100, (total / lv.km) * 100));
-
-  return { total, achieved, next, remaining, progresses };
+  var total = getCS(act.id).records.reduce(function(s,r){ return s+(r.km||0); }, 0);
+  var levels = act.levels;
+  var achieved = -1;
+  for (var i = levels.length-1; i >= 0; i--) { if (total >= levels[i].km) { achieved = i; break; } }
+  var nextIdx = achieved + 1;
+  var next = nextIdx < levels.length ? levels[nextIdx] : null;
+  var remaining = next ? Math.max(0, next.km - total) : 0;
+  var progresses = levels.map(function(lv){ return Math.min(100, (total/lv.km)*100); });
+  return { total:total, achieved:achieved, next:next, remaining:remaining, progresses:progresses, isDone:achieved === levels.length-1 };
 }
 
 function updateStatus(actId) {
-  const act = ACTIVITIES.find(a => a.id === actId);
-  const { total, achieved, next, remaining, progresses } = calcStatus(act);
-  const el = document.getElementById("act_"+actId);
+  var act = ACTIVITIES.find(function(a){ return a.id === actId; });
+  var res = calcStatus(act);
+  var el = document.getElementById("act_"+actId);
   if (!el) return;
-
-  // total
-  el.querySelector(".act-total").textContent = `누적 ${total.toFixed(1)}km`;
-
-  // level bars
-  act.levels.forEach((lv, i) => {
-    const fill = el.querySelector(`.level-fill[data-li="${i}"]`);
-    if (fill) fill.style.width = progresses[i] + "%";
+  el.querySelector(".act-total").textContent = "누적 " + fmtVal(act, res.total);
+  act.levels.forEach(function(lv, i) {
+    var fill = el.querySelector('.level-fill[data-li="'+i+'"]');
+    if (fill) fill.style.width = res.progresses[i] + "%";
   });
-
-  // status box
-  const sLabel = el.querySelector(".s-label");
-  const sVal = el.querySelector(".s-val");
-  const sBadge = el.querySelector(".s-badge");
-
-  if (achieved === act.levels.length - 1) {
-    // 고급 달성
-    sLabel.textContent = "?? 고급 달성 완료!";
-    sVal.textContent = `+${(total - act.levels[act.levels.length-1].km).toFixed(1)}km 초과`;
+  var sLabel = el.querySelector(".s-label");
+  var sVal = el.querySelector(".s-val");
+  var sBadge = el.querySelector(".s-badge");
+  var unitWord = act.unit === "m" ? "고도" : "거리";
+  if (res.isDone) {
+    var over = res.total - act.levels[act.levels.length-1].km;
+    sLabel.textContent = "고급 달성!";
+    sVal.textContent = "+" + fmtVal(act, over) + " 초과";
     sVal.style.color = act.color;
-    sBadge.textContent = "고급 ?";
-    sBadge.style.background = act.accent;
-  } else if (next) {
-    sLabel.textContent = `${next.name} 달성까지 남은 거리`;
-    sVal.textContent = remaining.toFixed(1) + "km";
-    sVal.style.color = achieved >= 0 ? act.color : "#fff";
-    if (achieved >= 0) {
-      sBadge.textContent = act.levels[achieved].name + " ?";
-      sBadge.style.background = act.accent;
+    sBadge.textContent = "고급 ✓"; sBadge.style.background = act.accent; sBadge.style.color = "#fff";
+  } else {
+    sLabel.textContent = (res.next ? res.next.name : "") + " 달성까지 남은 " + unitWord;
+    sVal.textContent = fmtVal(act, res.remaining);
+    sVal.style.color = res.achieved >= 0 ? act.color : "#fff";
+    if (res.achieved >= 0) {
+      sBadge.textContent = act.levels[res.achieved].name + " ✓";
+      sBadge.style.background = act.accent; sBadge.style.color = "#fff";
     } else {
       sBadge.textContent = "미달성";
-      sBadge.style.background = "var(--surface2)";
-      sBadge.style.border = "1px solid var(--border)";
-      sBadge.style.color = "var(--muted)";
+      sBadge.style.background = "var(--surface2)"; sBadge.style.color = "var(--muted)";
     }
   }
 }
 
-function renderAct(actId) {
-  const act = ACTIVITIES.find(a => a.id === actId);
-  const cs = getCS(actId);
-  const el = document.getElementById("act_"+actId);
-
-  // records
-  el.querySelector(".rec-list").innerHTML = cs.records.map(r => `
-    <div class="rec-item">
-      <input class="rec-date" type="text" placeholder="날짜"
-        value="${r.date||''}"
-        oninput="updateRecord('${actId}','${r.id}','date',this.value)"
-        style="color:${act.color}">
-      <div class="rec-sep"></div>
-      <input class="rec-dist" id="km_${r.id}" type="number" inputmode="decimal" placeholder="거리"
-        value="${r.km || ''}"
-        style="color:#fff"
-        oninput="updateRecord('${actId}','${r.id}','km',this.value)"
-        onfocus="this.select()">
-      <span class="rec-unit">km</span>
-      <button class="rec-del" onclick="deleteRecord('${actId}','${r.id}')">×</button>
-    </div>
-  `).join("");
-
-  updateStatus(actId);
-  updateSummary();
-}
-
 function updateSummary() {
-  const rows = document.getElementById("summaryRows");
+  var rows = document.getElementById("summaryRows");
   if (!rows) return;
-  rows.innerHTML = ACTIVITIES.map(act => {
-    const { total, achieved, next, remaining } = calcStatus(act);
-    const nextLv = act.levels[achieved < 0 ? 0 : Math.min(achieved+1, act.levels.length-1)];
-    const barPct = Math.min(100, (total / nextLv.km) * 100);
-    let kmText, nextText;
-    if (achieved === act.levels.length - 1) {
-      kmText = `<span style="color:${act.color}">${total.toFixed(1)}km</span>`;
-      nextText = `?? 고급 달성!`;
+  rows.innerHTML = ACTIVITIES.map(function(act) {
+    var res = calcStatus(act);
+    var barTarget = res.achieved < 0 ? act.levels[0] : (res.next || act.levels[act.levels.length-1]);
+    var barPct = Math.min(100, (res.total / barTarget.km) * 100);
+    var kmText = '<span style="color:' + (res.isDone ? act.color : '#fff') + ';font-weight:900">' + fmtVal(act, res.total) + '</span>';
+    var nextText;
+    if (res.isDone) {
+      nextText = '<span style="color:' + act.color + '">고급 달성!</span>';
     } else {
-      kmText = `<span style="color:#fff">${total.toFixed(1)}km</span>`;
-      const badge = achieved >= 0 ? `<span style="color:${act.color};font-weight:700">${act.levels[achieved].name} ?</span> · ` : "";
-      nextText = `${badge}${next.name}까지 <span style="color:${act.color};font-weight:700">${remaining.toFixed(1)}km</span>`;
+      var badge = res.achieved >= 0 ? '<span style="color:'+act.color+';font-weight:700">'+act.levels[res.achieved].name+'✓</span> · ' : "";
+      nextText = badge + res.next.name + '까지 <span style="color:'+act.color+';font-weight:700">' + fmtVal(act, res.remaining) + '</span>';
     }
-    return `
-      <div class="summary-act-row" onclick="scrollToAct('${act.id}')" style="cursor:pointer">
-        <div class="sum-icon">${act.icon}</div>
-        <div class="sum-info">
-          <div class="sum-name" style="color:${act.color}">${act.name}</div>
-          <div class="sum-bar-track">
-            <div class="sum-bar-fill" style="width:${barPct}%;background:linear-gradient(90deg,${act.accent},${act.color})"></div>
-          </div>
-        </div>
-        <div class="sum-right">
-          <div class="sum-km">${kmText}</div>
-          <div class="sum-next">${nextText}</div>
-        </div>
-      </div>`;
+    return '<div class="sum-row" onclick="scrollToAct(\''+act.id+'\')">'
+      + '<div class="sum-icon">' + act.icon + '</div>'
+      + '<div class="sum-info">'
+      + '<div class="sum-name" style="color:'+act.color+'">'+act.name+'</div>'
+      + '<div class="sum-bar-track"><div class="sum-bar-fill" style="width:'+barPct+'%;background:linear-gradient(90deg,'+act.accent+','+act.color+')"></div></div>'
+      + '</div>'
+      + '<div class="sum-right"><div class="sum-km">'+kmText+'</div><div class="sum-next">'+nextText+'</div></div>'
+      + '</div>';
   }).join("");
 }
 
 function scrollToAct(actId) {
-  const el = document.getElementById("act_"+actId);
+  var el = document.getElementById("act_"+actId);
   if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  el.scrollIntoView({ behavior:"smooth", block:"start" });
   el.style.transition = "box-shadow 0.3s";
   el.style.boxShadow = "0 0 0 2px #ffffff44";
-  setTimeout(() => { el.style.boxShadow = ""; }, 1000);
+  setTimeout(function(){ el.style.boxShadow = ""; }, 1000);
+}
+
+function renderAct(actId) {
+  var act = ACTIVITIES.find(function(a){ return a.id === actId; });
+  var cs = getCS(actId);
+  var el = document.getElementById("act_"+actId);
+  el.querySelector(".rec-list").innerHTML = cs.records.map(function(r) {
+    return '<div class="rec-item">'
+      + '<input class="rec-date" type="text" placeholder="날짜" value="'+( r.date||'') +'" style="color:'+act.color+'" oninput="updateRecord(\''+actId+'\',\''+r.id+'\',\'date\',this.value)">'
+      + '<div class="rec-sep"></div>'
+      + '<input class="rec-dist" id="km_'+r.id+'" type="number" inputmode="decimal" placeholder="'+(act.unit==='m'?'고도':'거리')+'" value="'+(r.km||'')+'" style="color:#fff" oninput="updateRecord(\''+actId+'\',\''+r.id+'\',\'km\',this.value)" onfocus="this.select()">'
+      + '<span class="rec-unit">'+act.unit+'</span>'
+      + '<button class="rec-del" onclick="deleteRecord(\''+actId+'\',\''+r.id+'\')">&#215;</button>'
+      + '</div>';
+  }).join("");
+  updateStatus(actId);
 }
 
 function resetAll() {
   if (!confirm("모든 기록을 초기화할까요?")) return;
   state = {}; saveState();
-  ACTIVITIES.forEach(a => renderAct(a.id));
+  ACTIVITIES.forEach(function(a){ renderAct(a.id); });
+  updateSummary();
 }
 
 function buildUI() {
-  const list = document.getElementById("actList");
-  ACTIVITIES.forEach(act => {
-    const div = document.createElement("div");
+  var list = document.getElementById("actList");
+  ACTIVITIES.forEach(function(act) {
+    var div = document.createElement("div");
     div.className = "act-card";
     div.id = "act_"+act.id;
-    div.innerHTML = `
-      <div class="act-header">
-        <div class="act-icon">${act.icon}</div>
-        <div>
-          <div class="act-title" style="color:${act.color}">${act.name}</div>
-          <div class="act-total">누적 0.0km</div>
-        </div>
-      </div>
-
-      <div class="levels">
-        ${act.levels.map((lv,i) => `
-          <div class="level-row">
-            <div class="level-meta">
-              <span class="level-name" style="color:${act.color}">${lv.name}</span>
-              <span class="level-km">${lv.km}km</span>
-            </div>
-            <div class="level-track">
-              <div class="level-fill" data-li="${i}"
-                style="width:0%;background:linear-gradient(90deg,${act.accent},${act.color})"></div>
-            </div>
-          </div>
-        `).join("")}
-      </div>
-
-      <div class="status-box">
-        <div class="status-left">
-          <div class="s-label">초급 달성까지 남은 거리</div>
-          <div class="s-val" style="color:#fff">${act.levels[0].km}.0km</div>
-        </div>
-        <div class="status-right">
-          <span class="s-badge" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted)">미달성</span>
-        </div>
-      </div>
-
-      <div class="sec-label">기록 입력</div>
-      <div class="rec-list"></div>
-      <button class="add-btn" onclick="addRecord('${act.id}')">＋ 기록 추가</button>
-      <div class="min-note">${act.minNote}</div>
-    `;
+    var unitWord = act.unit === "m" ? "고도" : "거리";
+    div.innerHTML = ''
+      + '<div class="act-header"><div class="act-icon">'+act.icon+'</div><div>'
+      + '<div class="act-title" style="color:'+act.color+'">'+act.name+'</div>'
+      + '<div class="act-total">누적 0'+act.unit+'</div></div></div>'
+      + '<div class="levels">'
+      + act.levels.map(function(lv,i){
+          return '<div class="level-row"><div class="level-meta">'
+            + '<span class="level-name" style="color:'+act.color+'">'+lv.name+'</span>'
+            + '<span class="level-km">'+lv.km+act.unit+'</span></div>'
+            + '<div class="level-track"><div class="level-fill" data-li="'+i+'" style="width:0%;background:linear-gradient(90deg,'+act.accent+','+act.color+')"></div></div>'
+            + '</div>';
+        }).join("")
+      + '</div>'
+      + '<div class="status-box"><div>'
+      + '<div class="s-label">초급 달성까지 남은 '+unitWord+'</div>'
+      + '<div class="s-val" style="color:#fff">'+act.levels[0].km+act.unit+'</div>'
+      + '</div><span class="s-badge" style="background:var(--surface2);color:var(--muted)">미달성</span></div>'
+      + '<div class="sec-label">기록 입력</div>'
+      + '<div class="rec-list"></div>'
+      + '<button class="add-btn" onclick="addRecord(\''+act.id+'\')">＋ 기록 추가</button>'
+      + '<div class="min-note">'+act.minNote+'</div>';
     list.appendChild(div);
     renderAct(act.id);
   });
 }
 
-const now = new Date();
-const month = now.getMonth() + 1;
-document.getElementById("mainTitle").textContent = `${month}월 건강 챌린지`;
-document.getElementById("headerDate").textContent =
-  now.toLocaleDateString("ko-KR",{year:"numeric",month:"long"});
-
+var now = new Date();
+document.getElementById("mainTitle").textContent = (now.getMonth()+1) + "월 건강 챌린지";
+document.getElementById("headerDate").textContent = now.toLocaleDateString("ko-KR",{year:"numeric",month:"long"});
 buildUI();
 updateSummary();
 </script>
