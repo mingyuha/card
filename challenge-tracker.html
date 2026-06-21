@@ -28,6 +28,7 @@ body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--
 .sum-km { font-size:17px; font-weight:900; letter-spacing:-0.5px; }
 .sum-next { font-size:10px; color:var(--muted); margin-top:2px; }
 .act-card { background:var(--surface); border-radius:18px; padding:20px; border:1px solid var(--border); margin-bottom:16px; transition:border-color 0.3s,box-shadow 0.3s; }
+.act-card.done { box-shadow:0 0 28px var(--glow); }
 .act-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
 .act-icon { display:flex; align-items:center; flex-shrink:0; }
 .act-title { font-size:15px; font-weight:900; }
@@ -138,6 +139,9 @@ function updateStatus(actId) {
   var res = calcStatus(act);
   var el = document.getElementById("act_"+actId);
   if (!el) return;
+  el.classList.toggle("done", res.isDone);
+  el.style.setProperty("--glow", act.accent + "44");
+  el.style.borderColor = res.isDone ? act.accent : "";
   el.querySelector(".act-total").textContent = "누적 " + fmtVal(act, res.total);
   act.levels.forEach(function(lv, i) {
     var fill = el.querySelector('.level-fill[data-li="'+i+'"]');
