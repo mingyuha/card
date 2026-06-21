@@ -18,7 +18,8 @@ body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--
 .summary-card { background:var(--surface); border-radius:18px; padding:18px 16px; border:1px solid var(--border); margin-bottom:20px; }
 .summary-card-title { font-size:10px; letter-spacing:3px; color:var(--muted); text-transform:uppercase; margin-bottom:14px; text-align:center; }
 .sum-rows { display:flex; flex-direction:column; gap:10px; }
-.sum-row { display:flex; align-items:center; gap:10px; background:var(--bg); border-radius:12px; padding:11px 13px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.sum-row { display:flex; align-items:center; gap:10px; background:var(--bg); border-radius:12px; padding:11px 13px; cursor:pointer; -webkit-tap-highlight-color:transparent; border:1px solid transparent; transition:border-color 0.3s,box-shadow 0.3s; }
+.sum-row.done { box-shadow:0 0 18px var(--glow); }
 .sum-icon { display:flex; align-items:center; flex-shrink:0; }
 .sum-info { flex:1; min-width:0; }
 .sum-name { font-size:12px; font-weight:700; margin-bottom:5px; }
@@ -186,7 +187,7 @@ function updateSummary() {
       var badge = res.achieved >= 0 ? '<span style="color:'+act.color+';font-weight:700">'+act.levels[res.achieved].name+'✓</span> · ' : "";
       nextText = badge + res.next.name + '까지 <span style="color:'+act.color+';font-weight:700">' + fmtVal(act, res.remaining) + '</span>';
     }
-    return '<div class="sum-row" onclick="scrollToAct(\''+act.id+'\')">'
+    return '<div class="sum-row' + (res.isDone ? ' done' : '') + '" style="--glow:' + act.accent + '44;border-color:' + (res.isDone ? act.accent : 'transparent') + '" onclick="scrollToAct(\''+act.id+'\')">'
       + '<div class="sum-icon">' + act.icon + '</div>'
       + '<div class="sum-info">'
       + '<div class="sum-name" style="color:'+act.color+'">'+act.name+'</div>'
